@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../static/style.css">
+    
+    <title>Tentang Kami | Aprilion Printing</title>
+    <style>
+
+      .home {
+        display: flex;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                    url(../static/gambar/backgroud_about.jpg) no-repeat center center/cover;
+        position: relative;
+        color: #fff;
+      }
+
+      .home .content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+
+      .home .content h3 {
+        font-size: 3.5rem;
+        color: #ffd700;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      .home .content span {
+        display: block;
+        font-size: 1.5rem;
+        color: #fff;
+        margin-bottom: 1.5rem;
+      }
+
+      .home .content p {
+        font-size: 1.2rem;
+        text-indent: 2rem;
+        text-align: justify;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
+      }
+
+      .btn-produk {
+        display: inline-block;
+        text-decoration: none;
+        padding: 12px 24px;
+        background-color: #ffd700;
+        color: #333;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .btn-produk:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        background-color: #fff;
+      }
+
+      .about {
+        padding: 4rem 9%;
+        background-color: var(--background-color);
+      }
+
+      .about .heading {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 3rem;
+        position: relative;
+      }
+
+      .about .heading::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background-color: #ffd700;
+      }
+
+      .about .row {
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+
+      .about .image {
+        flex: 1;
+        text-align: center;
+      }
+
+      .about .image img {
+        max-width: 100%;
+        border-radius: 15px;
+        box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .about .image img:hover {
+        transform: scale(1.05);
+      }
+
+      .about .content {
+        flex: 2;
+      }
+
+      .about .content p, 
+      .about .content ul {
+        font-size: 1.1rem;
+        color: #383838;
+        margin-bottom: 1rem;
+      }
+
+      .about .content ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      .about .content ul li {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 10px;
+      }
+
+      .about .content ul li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #ffd700;
+        font-weight: bold;
+      }
+
+      @media (max-width: 991px) {
+        .home .content {
+          padding: 1.5rem;
+          margin: 1rem;
+        }
+
+        .home .content h3 {
+          font-size: 2.5rem;
+        }
+
+        .about .row {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- navbar start -->
+    {% include 'navbar.html' %}
+    <!-- navbar end -->
+
+    <section class="home" id="home">
+      <div class="content">
+        <h3>Aprilion Printing</h3>
+        <span>Graphic Design . Digital Printing . Advertising</span>
+        <p>
+          Aprilion Printing adalah perusahaan percetakan profesional yang
+          menyediakan berbagai layanan cetak berkualitas tinggi untuk kebutuhan
+          bisnis dan pribadi Anda. Dengan teknologi modern dan tim
+          berpengalaman, kami berkomitmen untuk memberikan hasil terbaik dengan
+          harga kompetitif. Aprilion Printing didirikan oleh Ichsan untuk
+          memenuhi kebutuhan masyarakat akan layanan percetakan dan desain
+          grafis yang berkualitas, inovatif, dan terjangkau. Berangkat dari
+          pengalaman di bidang desain grafis dan percetakan, Ichsan berkomitmen
+          untuk membantu pelanggan mewujudkan ide kreatif mereka dengan hasil
+          cetakan terbaik.
+        </p>
+        <a href="/produk" class="btn-produk">Lihat Produk</a>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <h1 class="heading">VISI</h1>
+      <div class="row">
+        <div class="image">
+          <img src="../static/gambar/visi dan misi.jpeg" alt="Visi Aprilion Printing" />
+        </div>
+        <div class="content">
+          <p>
+            Menjadi penyedia layanan percetakan dan desain grafis yang
+            terpercaya, dengan mengedepankan kualitas, inovasi, dan kepuasan
+            pelanggan.
+          </p>
+        </div>
+      </div>
+
+      <h1 class="heading">MISI</h1>
+      <div class="row">
+        <div class="image">
+          <img src="../static/gambar/misi.jpeg" alt="Misi Aprilion Printing" />
+        </div>
+        <div class="content">
+          <ul>
+            <li>
+              Menyediakan layanan percetakan dengan hasil berkualitas tinggi dan
+              tepat waktu.
+            </li>
+            <li>
+              Memberikan desain grafis kreatif sesuai kebutuhan pelanggan.
+            </li>
+            <li>
+              Membangun hubungan baik dengan pelanggan melalui layanan yang
+              profesional dan ramah.
+            </li>
+            <li>
+              Mengedepankan solusi percetakan yang efisien dan ramah lingkungan.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
+  </body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Detail Pesanan | Aprilion Printing</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link href="/static/style.css" rel="stylesheet" />
+    <script src="../static/script.js"></script>
+
+    <style>
+      :root {
+        --primary-color: #ffd700;
+        --secondary-color: #262626;
+        --light-color: #f8fafc;
+        --text-color: #333;
+        --accent-color: #4a4a4a;
+      }
+
+      body {
+        background-color: #f4f4f4;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .order-detail-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .order-header {
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        padding: 20px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .order-sections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 30px;
+      }
+
+      .order-section {
+        background-color: var(--light-color);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .section-title {
+        color: var(--secondary-color);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-title i {
+        color: var(--primary-color);
+      }
+
+      .detail-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e9ecef;
+        position: relative;
+      }
+
+      .detail-row:last-child {
+        border-bottom: none;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        color: var(--accent-color);
+        flex: 0.7;
+        text-align: left;
+        padding-right: 5px;
+      }
+
+      .detail-label::after {
+        content: ":";
+        position: absolute;
+        left: 40%;
+        margin-left: -5px;
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .detail-value {
+        color: var(--text-color);
+        flex: 1;
+        text-align: left;
+      }
+
+      .upload-section {
+        background-color: white;
+        border: 2px dashed var(--primary-color);
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      /* Flash Messages Styling (from original code) */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+
+      .flash-messages-container.show {
+        right: 20px;
+      }
+
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+
+      @media (max-width: 768px) {
+        .order-detail-container {
+          margin: 1rem;
+        }
+        .order-sections {
+          grid-template-columns: 1fr;
+        }
+        .order-container {
+          margin: 0 10px;
+        }
+        .order-content {
+          padding: 15px;
+        }
+        .order-row {
+          flex-direction: column;
+        }
+        .order-label,
+        .order-value {
+          width: 100%;
+          margin-bottom: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- header start -->
+    {% include 'navbar.html' %}
+    <!-- navbar end -->
+    
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} 
+        {% if messages %} 
+          {% for category, message in messages %}
+            <div
+              class="alert flash-alert alert-{{ category }} alert-dismissible fade"
+              role="alert"
+            >
+              {% if category == 'success' %}
+                <i class="bi bi-check-circle-fill me-2"></i>
+              {% elif category == 'danger' %}
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              {% elif category == 'warning' %}
+                <i class="bi bi-exclamation-circle-fill me-2"></i>
+              {% endif %} 
+              {{ message }}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          {% endfor %} 
+        {% endif %} 
+      {% endwith %}
+    </div>
+
+    <div class="order-detail-container">
+      <div class="order-header">
+        <h1 class="mb-0">Detail Pemesanan</h1>
+      </div>
+
+      <div class="order-sections">
+        <!-- Produk Section -->
+        <div class="order-section">
+          <div class="section-title">
+            <i class="bi bi-box fs-4"></i>
+            <h4 class="mb-0">Informasi Produk</h4>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Nama Produk</span>
+            <span class="detail-value">{{ order['nama_produk'] }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Ukuran</span>
+            <span class="detail-value">{{ order['ukuran'] }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Harga per Satuan</span>
+            <span class="detail-value">Rp. {{ "{:,}".format(order['harga_per_satuan']|int) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Jumlah</span>
+            <span class="detail-value">{{ order['jumlah'] }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Total Biaya</span>
+            <span class="detail-value" style="font-weight: bolder; font-size: large;">Rp. {{ "{:,}".format(order['total_biaya']|int) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Desain</span>
+            <span class="detail-value">
+              {% if order['desain'] %}
+              <a 
+                href="{{ url_for('static', filename='uploads/' + order['desain']) }}" 
+                target="_blank" 
+                class="btn btn-sm btn-outline-secondary"
+              >
+                <i class="bi bi-eye-fill me-1"></i> Lihat Desain
+              </a>
+              {% else %} Tidak ada desain {% endif %}
+            </span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Keterangan</span>
+            <span class="detail-value">{{ order['keterangan'] }}</span>
+          </div>
+        </div>
+
+        <!-- Pengiriman dan Pengguna Section -->
+        <div>
+          <div class="order-section mb-3">
+            <div class="section-title">
+              <i class="bi bi-truck fs-4"></i>
+              <h4 class="mb-0">Informasi Pengiriman</h4>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Opsi Pengiriman</span>
+              <span class="detail-value">{{ order['opsi_pengiriman'] }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Alamat Pengiriman</span>
+              <span class="detail-value">
+                {% if order['opsi_pengiriman'] == 'Antar ke lokasi' %} 
+                  {{ order['alamat'] }} 
+                {% else %} 
+                  - 
+                {% endif %}
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Metode Pembayaran</span>
+              <span class="detail-value">{{ order['metode_pembayaran'] }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Tanggal Pemesanan</span>
+              <span class="detail-value">{{ order['tanggal_pemesanan'].strftime('%d-%m-%Y') }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Status</span>
+              <span class="detail-value">{{ order['status'] }}</span>
+            </div>
+          </div>
+
+          <div class="order-section">
+            <div class="section-title">
+              <i class="bi bi-person fs-4"></i>
+              <h4 class="mb-0">Informasi Pengguna</h4>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Nama</span>
+              <span class="detail-value">{{ user.name }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Telepon</span>
+              <span class="detail-value">{{ user.phone }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">{{ user.email }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mb-4">
+        <div class="upload-section">
+          <h5 class="mb-3">Unggah Bukti Pembayaran</h5>
+          <form 
+            action="{{ url_for('upload_bukti', order_id=order['_id']) }}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <div class="mb-3">
+              <input
+                type="file"
+                name="bukti_pembayaran"
+                id="bukti_pembayaran"
+                class="form-control"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-upload me-2"></i>Unggah Bukti Pembayaran
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
